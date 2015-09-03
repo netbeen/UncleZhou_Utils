@@ -57,11 +57,12 @@ private:
 		return result;
 	}
 
+	//求两个点的距离
 	float inline getDistance(Point3f point1, Point3f point2) {
 		return sqrt(pow(point1.x - point2.x, 2) + pow(point1.y - point2.y, 2) + pow(point1.z - point2.z, 2));
 	}
 
-	//求两个向量的
+	//求两个向量的点积
 	double  scalarProduct3f(double a1, double a2, double a3, double b1, double b2, double b3){
 		return a1*b1+a2*b2+a3*b3;
 	}
@@ -71,10 +72,12 @@ private:
 		return sqrt(pow(a1,2)+pow(a2,2)+pow(a3,2));
 	}
 
+	//求两个点的距离
 	double distanceOfPointToPoint(Point3f point1, Point3f point2){
 		return sqrt(pow(point1.x-point2.x,2)+pow(point1.y-point2.y,2)+pow(point1.z-point2.z,2));
 	}
 
+	//求点到线段的距离
 	double distanceOfPointToLine(Point3f point, Point3f lineStart, Point3f lineEnd){
 		Vector3f ab = Vector3f(lineEnd.x-lineStart.x,lineEnd.y-lineStart.y,lineEnd.z-lineStart.z);
 		Vector3f ap = Vector3f(point.x-lineStart.x,point.y-lineStart.y,point.z-lineStart.z);
@@ -92,6 +95,7 @@ private:
 	}
 
 public:
+	//输入两个折线段集，返回一个五元素vector（距离、第一个折线段首部index，第一个折线段尾部部index，第二个折线段首部index，第二个折线段尾部index）
 	std::vector<float> calc(std::vector<Point3f> foldLine1, std::vector<Point3f> foldLine2) {
 		assert(foldLine1.size() >= 2);
 		assert(foldLine2.size() >= 2);
@@ -142,7 +146,7 @@ public:
 				double t = (a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1);
 				double s = (c1 - b1 * t) / a1;
 
-				std::cout << "s=" << s << " t=" << t << std::endl;
+				//std::cout << "s=" << s << " t=" << t << std::endl;
 				double localDistance;
 				if (0 <= s && s <= 1 && 0 <= t && t <= 1) {
 					double X = x1 + s * (x2 - x1);
@@ -153,19 +157,19 @@ public:
 					double V = y3 + s * (y4 - y3);
 					double W = z3 + s * (z4 - z3);
 					localDistance = sqrt(pow(X - U, 2) + pow(Y - V, 2) + pow(Z - W, 2));
-					std::cout << "localDistance: " << localDistance << std::endl;
+					//std::cout << "localDistance: " << localDistance << std::endl;
 				}else{
 					double distanceAToCD = this->distanceOfPointToLine(foldLine1.at(i),foldLine2.at(j),foldLine2.at(j+1));
-					std::cout << "distanceAToCD: " << distanceAToCD << std::endl;
+					//std::cout << "distanceAToCD: " << distanceAToCD << std::endl;
 					double distanceBToCD = this->distanceOfPointToLine(foldLine1.at(i+1),foldLine2.at(j),foldLine2.at(j+1));
-					std::cout << "distanceBToCD: " << distanceBToCD << std::endl;
+					//std::cout << "distanceBToCD: " << distanceBToCD << std::endl;
 					double distanceCToAB = this->distanceOfPointToLine(foldLine2.at(j),foldLine1.at(i),foldLine1.at(i+1));
-					std::cout << "distanceCToAB: " << distanceCToAB << std::endl;
+					//std::cout << "distanceCToAB: " << distanceCToAB << std::endl;
 					double distanceDToAB = this->distanceOfPointToLine(foldLine2.at(j+1),foldLine1.at(i),foldLine1.at(i+1));
-					std::cout << "distanceDToAB: " << distanceDToAB << std::endl;
+					//std::cout << "distanceDToAB: " << distanceDToAB << std::endl;
 
 					localDistance = std::min(std::min(distanceAToCD,distanceBToCD),std::min(distanceCToAB,distanceDToAB));
-					std::cout << "localDistance: " << localDistance << std::endl;
+					//std::cout << "localDistance: " << localDistance << std::endl;
 				}
 
 				if(localDistance < minDistance){
