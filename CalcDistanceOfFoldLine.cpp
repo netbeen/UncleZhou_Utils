@@ -17,22 +17,24 @@
 #include <iostream>
 #include <climits>
 
+////3维点
 class Point3f {
 public:
-	const float x;
-	const float y;
-	const float z;
-	Point3f(float x, float y, float z) :
+	const double x;
+	const double y;
+	const double z;
+	Point3f(double x, double y, double z) :
 			x(x), y(y), z(z) {
 	}
 };
 
+//3维向量
 class Vector3f {
 public:
-	const float x;
-	const float y;
-	const float z;
-	Vector3f(float x, float y, float z) :
+	const double x;
+	const double y;
+	const double z;
+	Vector3f(double x, double y, double z) :
 			x(x), y(y), z(z) {
 	}
 };
@@ -42,6 +44,7 @@ private:
 	std::vector<Point3f> foldLine1;
 	std::vector<Point3f> foldLine2;
 
+	//采样函数
 	std::vector<Point3f> inline sampling(Point3f point1, Point3f point2, int num = 100) {
 		std::vector<Point3f> result;
 
@@ -90,17 +93,17 @@ private:
 		}else{
 			double Mab = this->magnitude(ab.x,ab.y,ab.z);	//ab的模
 			double Map = this->magnitude(ap.x,ap.y,ap.z);	//ap的模
-			return sqrt(pow(Map,2)+pow(Mab*r,2));
+			return sqrt(pow(Map,2)-pow(Mab*r,2));
 		}
 	}
 
 public:
 	//输入两个折线段集，返回一个五元素vector（距离、第一个折线段首部index，第一个折线段尾部部index，第二个折线段首部index，第二个折线段尾部index）
-	std::vector<float> calc(std::vector<Point3f> foldLine1, std::vector<Point3f> foldLine2) {
+	std::vector<double> calc(std::vector<Point3f> foldLine1, std::vector<Point3f> foldLine2) {
 		assert(foldLine1.size() >= 2);
 		assert(foldLine2.size() >= 2);
 
-		std::vector<float> result;
+		std::vector<double> result;
 		float minDistance = INT_MAX;
 		int startIndexI = -1;
 		int endIndexI = -1;
@@ -199,7 +202,7 @@ int main() {
 	std::vector<Point3f> foldLine2 { Point3f(-100, -100, -100),Point3f(0, 1, 0), Point3f(1, 0, 0) };
 
 	CalcDistanceOfFoldLine s;
-	std::vector<float> result = s.calc(foldLine1, foldLine2);
+	std::vector<double> result = s.calc(foldLine1, foldLine2);
 
 	std::cout << "Distance:" << std::endl;
 	std::cout << result.front() << std::endl;
